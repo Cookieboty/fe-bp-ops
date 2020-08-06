@@ -1,6 +1,14 @@
+/*
+ * @Author: Cookie
+ * @Date: 2020-08-06 21:46:04
+ * @LastEditors: Cookie
+ * @LastEditTime: 2020-08-06 22:53:20
+ * @Description:
+ */
 import { Reducer, Effect } from 'umi';
 import { CurrentUser, ListItemDataType } from './data';
-import { queryCurrent, queryFakeList } from './service';
+import { queryFakeList } from './service';
+import { queryCurrent } from '@/services/user';
 
 export interface ModalState {
   currentUser: Partial<CurrentUser>;

@@ -12,27 +12,15 @@ import { ActivitiesType, CurrentUser, NoticeType, RadarDataType } from './data';
 
 const links = [
   {
-    title: '操作一',
+    title: '工程管理',
     href: '',
   },
   {
-    title: '操作二',
+    title: 'BUG 平台',
     href: '',
   },
   {
-    title: '操作三',
-    href: '',
-  },
-  {
-    title: '操作四',
-    href: '',
-  },
-  {
-    title: '操作五',
-    href: '',
-  },
-  {
-    title: '操作六',
+    title: '流程管理',
     href: '',
   },
 ];
@@ -56,7 +44,7 @@ const PageHeaderContent: React.FC<{ currentUser: CurrentUser }> = ({ currentUser
   return (
     <div className={styles.pageHeaderContent}>
       <div className={styles.avatar}>
-        <Avatar size="large" src={currentUser.avatar} />
+        <Avatar size="large" src={currentUser.avatar_url} />
       </div>
       <div className={styles.content}>
         <div className={styles.contentTitle}>
@@ -64,25 +52,23 @@ const PageHeaderContent: React.FC<{ currentUser: CurrentUser }> = ({ currentUser
           {currentUser.name}
           ，祝你开心每一天！
         </div>
-        <div>
-          {currentUser.title} |{currentUser.group}
-        </div>
+        <div>{currentUser.web_url}</div>
       </div>
     </div>
   );
 };
 
-const ExtraContent: React.FC<{}> = () => (
+const ExtraContent: React.FC<{ projectNotice: NoticeType[] }> = ({ projectNotice }) => (
   <div className={styles.extraContent}>
     <div className={styles.statItem}>
-      <Statistic title="项目数" value={56} />
+      <Statistic title="项目数" value={projectNotice.length} />
     </div>
-    <div className={styles.statItem}>
+    {/* <div className={styles.statItem}>
       <Statistic title="团队内排名" value={8} suffix="/ 24" />
     </div>
     <div className={styles.statItem}>
       <Statistic title="项目访问" value={2223} />
-    </div>
+    </div> */}
   </div>
 );
 
@@ -102,7 +88,7 @@ class Workplace extends Component<WorkplaceProps> {
   }
 
   renderActivities = (item: ActivitiesType) => {
-    const events = item.template.split(/@\{([^{}]*)\}/gi).map((key) => {
+    const events = item.template.split(/@\{([^{}]*)\}/gi).map(key => {
       if (item[key]) {
         return (
           <a href={item[key].link} key={item[key].name}>
@@ -143,13 +129,13 @@ class Workplace extends Component<WorkplaceProps> {
       radarData,
     } = this.props;
 
-    if (!currentUser || !currentUser.userid) {
+    if (!currentUser || !currentUser.id) {
       return null;
     }
     return (
       <PageHeaderWrapper
         content={<PageHeaderContent currentUser={currentUser} />}
-        extraContent={<ExtraContent />}
+        extraContent={<ExtraContent projectNotice={projectNotice} />}
       >
         <Row gutter={24}>
           <Col xl={16} lg={24} md={24} sm={24} xs={24}>
@@ -162,23 +148,23 @@ class Workplace extends Component<WorkplaceProps> {
               loading={projectLoading}
               bodyStyle={{ padding: 0 }}
             >
-              {projectNotice.map((item) => (
+              {projectNotice.map(item => (
                 <Card.Grid className={styles.projectGrid} key={item.id}>
                   <Card bodyStyle={{ padding: 0 }} bordered={false}>
                     <Card.Meta
                       title={
                         <div className={styles.cardTitle}>
                           <Avatar size="small" src={item.logo} />
-                          <Link to={item.href}>{item.title}</Link>
+                          <Link to={item.web_url}>{item.name}</Link>
                         </div>
                       }
-                      description={item.description}
+                      description={item.description ? item.description : '暂无备注'}
                     />
                     <div className={styles.projectItemContent}>
-                      <Link to={item.memberLink}>{item.member || ''}</Link>
-                      {item.updatedAt && (
-                        <span className={styles.datetime} title={item.updatedAt}>
-                          {moment(item.updatedAt).fromNow()}
+                      <Link to={item.web_url}>{item.name_with_namespace || ''}</Link>
+                      {item.last_activity_at && (
+                        <span className={styles.datetime} title={item.last_activity_at}>
+                          {moment(item.last_activity_at).fromNow()}
                         </span>
                       )}
                     </div>
@@ -195,7 +181,7 @@ class Workplace extends Component<WorkplaceProps> {
             >
               <List<ActivitiesType>
                 loading={activitiesLoading}
-                renderItem={(item) => this.renderActivities(item)}
+                renderItem={item => this.renderActivities(item)}
                 dataSource={activities}
                 className={styles.activitiesList}
                 size="large"
@@ -211,7 +197,7 @@ class Workplace extends Component<WorkplaceProps> {
             >
               <EditableLinkGroup onAdd={() => {}} links={links} linkElement={Link} />
             </Card>
-            <Card
+            {/* <Card
               style={{ marginBottom: 24 }}
               bordered={false}
               title="XX 指数"
@@ -229,7 +215,7 @@ class Workplace extends Component<WorkplaceProps> {
             >
               <div className={styles.members}>
                 <Row gutter={48}>
-                  {projectNotice.map((item) => (
+                  {projectNotice.map(item => (
                     <Col span={12} key={`members-item-${item.id}`}>
                       <Link to={item.href}>
                         <Avatar src={item.logo} size="small" />
@@ -239,7 +225,7 @@ class Workplace extends Component<WorkplaceProps> {
                   ))}
                 </Row>
               </div>
-            </Card>
+            </Card> */}
           </Col>
         </Row>
       </PageHeaderWrapper>

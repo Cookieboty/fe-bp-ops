@@ -58,19 +58,19 @@ export interface GeographicType {
 
 export interface NoticeType {
   id: string;
-  title: string;
+  name: string;
   logo: string;
   description: string;
-  updatedAt: string;
+  last_activity_at: string;
   member: string;
-  href: string;
-  memberLink: string;
+  web_url: string;
+  name_with_namespace: string;
 }
 
 export interface CurrentUser {
   name: string;
-  avatar: string;
-  userid: string;
+  avatar_url: string;
+  id: Number;
   notice: NoticeType[];
   email: string;
   signature: string;
@@ -83,7 +83,9 @@ export interface CurrentUser {
   geographic: GeographicType;
   address: string;
   phone: string;
+  web_url: string;
 }
+
 export interface Member {
   avatar: string;
   name: string;

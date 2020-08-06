@@ -1,6 +1,15 @@
+/*
+ * @Author: Cookie
+ * @Date: 2020-08-06 21:46:04
+ * @LastEditors: Cookie
+ * @LastEditTime: 2020-08-06 23:29:55
+ * @Description:
+ */
 import { Effect, Reducer } from 'umi';
 import { ActivitiesType, CurrentUser, NoticeType, RadarDataType } from './data';
-import { fakeChartData, queryActivities, queryCurrent, queryProjectNotice } from './service';
+import { fakeChartData, queryActivities } from './service';
+import { queryCurrent } from '@/services/user';
+import { queryProjectNotice } from '@/services/project';
 
 export interface ModalState {
   currentUser?: CurrentUser;
@@ -37,24 +46,24 @@ const Model: ModelType = {
     *init(_, { put }) {
       yield put({ type: 'fetchUserCurrent' });
       yield put({ type: 'fetchProjectNotice' });
-      yield put({ type: 'fetchActivitiesList' });
-      yield put({ type: 'fetchChart' });
+      // yield put({ type: 'fetchActivitiesList' });
+      // yield put({ type: 'fetchChart' });
     },
     *fetchUserCurrent(_, { call, put }) {
-      const response = yield call(queryCurrent);
+      const { data } = yield call(queryCurrent);
       yield put({
         type: 'save',
         payload: {
-          currentUser: response,
+          currentUser: data,
         },
       });
     },
     *fetchProjectNotice(_, { call, put }) {
-      const response = yield call(queryProjectNotice);
+      const { data } = yield call(queryProjectNotice, { pageSize: 9, pageNum: 1 });
       yield put({
         type: 'save',
         payload: {
-          projectNotice: Array.isArray(response) ? response : [],
+          projectNotice: Array.isArray(data) ? data : [],
         },
       });
     },
