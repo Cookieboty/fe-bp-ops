@@ -27,7 +27,7 @@ export interface ModelType {
   };
 }
 
-const Model: ModelType = {
+const AccountSettingModel: ModelType = {
   namespace: 'accountAndsettings',
 
   state: {
@@ -110,4 +110,4 @@ const Model: ModelType = {
   },
 };
 
-export default Model;
+export default AccountSettingModel;

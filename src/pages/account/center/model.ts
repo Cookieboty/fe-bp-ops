@@ -2,7 +2,7 @@
  * @Author: Cookie
  * @Date: 2020-08-06 21:46:04
  * @LastEditors: Cookie
- * @LastEditTime: 2020-08-06 22:53:20
+ * @LastEditTime: 2020-08-07 20:58:23
  * @Description:
  */
 import { Reducer, Effect } from 'umi';
@@ -28,7 +28,7 @@ export interface ModelType {
   };
 }
 
-const Model: ModelType = {
+const AccountModel: ModelType = {
   namespace: 'accountAndcenter',
 
   state: {
@@ -69,4 +69,4 @@ const Model: ModelType = {
   },
 };
 
-export default Model;
+export default AccountModel;
