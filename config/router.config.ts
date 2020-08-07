@@ -2,7 +2,7 @@
  * @Author: Cookie
  * @Date: 2020-08-06 21:46:04
  * @LastEditors: Cookie
- * @LastEditTime: 2020-08-07 22:15:25
+ * @LastEditTime: 2020-08-07 23:05:42
  * @Description:
  */
 export default [
@@ -10,6 +10,17 @@ export default [
     path: '/',
     component: '../layouts/BlankLayout',
     routes: [
+      {
+        path: '/user',
+        name: '用户模块',
+        component: '../layouts/UserLayout',
+        routes: [
+          {
+            path: '/user/login',
+            component: './user/login',
+          },
+        ],
+      },
       {
         path: '/',
         component: '../layouts/BasicLayout',

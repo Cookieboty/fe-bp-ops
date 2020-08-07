@@ -2,9 +2,9 @@
  * @Author: Cookie
  * @Date: 2020-08-06 13:57:23
  * @LastEditors: Cookie
- * @LastEditTime: 2020-08-06 17:17:47
+ * @LastEditTime: 2020-08-07 23:01:34
  * @FilePath: /fe-bp-ops/src/utils/request.ts
- * @Description: 
+ * @Description:
  */
 import { extend } from 'umi-request';
 import { notification } from 'antd';
@@ -36,9 +36,9 @@ const errorHandler = (error: { response: Response }): Response => {
     const errorText = codeMessage[response.status] || response.statusText;
     const { status, url } = response;
 
-    // if (response.status === 401) {
-    //   window.location.href = '/user/login'
-    // }
+    if (response.status === 401) {
+      window.location.href = '/user/login';
+    }
     notification.error({
       message: `请求错误 ${status}: ${url}`,
       description: errorText,
@@ -56,12 +56,12 @@ const errorHandler = (error: { response: Response }): Response => {
  * 配置request请求时的默认参数
  */
 const request = extend({
-  prefix: "/api",
+  prefix: '/api',
   errorHandler, // 默认错误处理
   credentials: 'include', // 默认请求是否带上cookie
   headers: {
-    "authorization": localStorage.getItem('authorization')
-  }
+    authorization: localStorage.getItem('authorization'),
+  },
 });
 
 export default request;
