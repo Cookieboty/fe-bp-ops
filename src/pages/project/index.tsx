@@ -1,19 +1,20 @@
 import React, { FC, useEffect } from 'react';
-import { Button, Card, Col, Form, List, Row, Select, Tag } from 'antd';
+import { Button, Card, Col, Form, List, Row, Input, Tag } from 'antd';
 import { LoadingOutlined, StarOutlined, LikeOutlined, MessageOutlined } from '@ant-design/icons';
 import { connect, Dispatch } from 'umi';
 import ArticleListContent from './components/ArticleListContent';
 import { StateType } from './model';
 import { ListItemDataType } from './data';
 import styles from './style.less';
+import { PageHeaderWrapper } from '@ant-design/pro-layout';
 
-interface ArticlesProps {
+interface ProjectProps {
   dispatch: Dispatch<any>;
   project: StateType;
   loading: boolean;
 }
 
-const Articles: FC<ArticlesProps> = ({ dispatch, project: { list }, loading }) => {
+const Project: FC<ProjectProps> = ({ dispatch, project: { list }, loading }) => {
   useEffect(() => {
     dispatch({
       type: 'project/fetch',
@@ -59,8 +60,20 @@ const Articles: FC<ArticlesProps> = ({ dispatch, project: { list }, loading }) =
     }
   };
 
+  const mainSearch = (
+    <div style={{ textAlign: 'center' }}>
+      <Input.Search
+        placeholder="请输入"
+        enterButton="搜索"
+        size="large"
+        onSearch={fetchMore}
+        style={{ maxWidth: 522, width: '100%' }}
+      />
+    </div>
+  );
+
   return (
-    <>
+    <PageHeaderWrapper content={mainSearch}>
       <Card
         style={{ marginTop: 24 }}
         bordered={false}
@@ -99,7 +112,7 @@ const Articles: FC<ArticlesProps> = ({ dispatch, project: { list }, loading }) =
           )}
         />
       </Card>
-    </>
+    </PageHeaderWrapper>
   );
 };
 
@@ -114,4 +127,4 @@ export default connect(
     project,
     loading: loading.models.project,
   }),
-)(Articles);
+)(Project);
