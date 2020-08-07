@@ -1,3 +1,10 @@
+/*
+ * @Author: Cookie
+ * @Date: 2020-08-06 21:46:04
+ * @LastEditors: Cookie
+ * @LastEditTime: 2020-08-07 21:43:31
+ * @Description:
+ */
 import { Settings as ProSettings } from '@ant-design/pro-layout';
 
 type DefaultSettings = ProSettings & {
@@ -14,7 +21,7 @@ const proSettings: DefaultSettings = {
   fixSiderbar: true,
   colorWeak: false,
   menu: {
-    locale: true,
+    locale: false,
   },
   title: 'DevOps',
   pwa: false,

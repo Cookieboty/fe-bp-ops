@@ -130,7 +130,6 @@ class Workplace extends Component<WorkplaceProps> {
       projectNotice,
       projectLoading,
       activitiesLoading,
-      radarData,
     } = this.props;
 
     if (!currentUser || !currentUser.id) {
@@ -159,13 +158,17 @@ class Workplace extends Component<WorkplaceProps> {
                       title={
                         <div className={styles.cardTitle}>
                           <Avatar size="small" src={item.logo} />
-                          <Link to={item.web_url}>{item.name}</Link>
+                          <a href={item.web_url} target="_blank">
+                            {item.name}
+                          </a>
                         </div>
                       }
                       description={item.description ? item.description : '暂无备注'}
                     />
                     <div className={styles.projectItemContent}>
-                      <Link to={item.web_url}>{item.name_with_namespace || ''}</Link>
+                      <a href={item.web_url} target="_blank">
+                        {item.name_with_namespace || ''}
+                      </a>
                       {item.last_activity_at && (
                         <span className={styles.datetime} title={item.last_activity_at}>
                           {moment(item.last_activity_at).fromNow()}

@@ -1,6 +1,13 @@
+/*
+ * @Author: Cookie
+ * @Date: 2020-08-07 20:43:25
+ * @LastEditors: Cookie
+ * @LastEditTime: 2020-08-07 21:33:40
+ * @Description:
+ */
 import { Effect, Reducer } from 'umi';
 import { ListItemDataType } from './data';
-import { queryFakeList } from './service';
+import { queryProject } from '@/services/project';
 
 export interface StateType {
   list: ListItemDataType[];
@@ -20,7 +27,7 @@ export interface ModelType {
 }
 
 const Model: ModelType = {
-  namespace: 'listAndsearchAndarticles',
+  namespace: 'project',
 
   state: {
     list: [],
@@ -28,17 +35,17 @@ const Model: ModelType = {
 
   effects: {
     *fetch({ payload }, { call, put }) {
-      const response = yield call(queryFakeList, payload);
+      const { data } = yield call(queryProject, payload);
       yield put({
         type: 'queryList',
-        payload: Array.isArray(response) ? response : [],
+        payload: Array.isArray(data) ? data : [],
       });
     },
     *appendFetch({ payload }, { call, put }) {
-      const response = yield call(queryFakeList, payload);
+      const { data } = yield call(queryProject, payload);
       yield put({
         type: 'appendList',
-        payload: Array.isArray(response) ? response : [],
+        payload: Array.isArray(data) ? data : [],
       });
     },
   },
