@@ -87,8 +87,12 @@ class Workplace extends Component<WorkplaceProps> {
     });
   }
 
+  onMessage(message: string) {
+    console.log(message);
+  }
+
   renderActivities = (item: ActivitiesType) => {
-    const events = item.template.split(/@\{([^{}]*)\}/gi).map(key => {
+    const events = item.template.split(/@\{([^{}]*)\}/gi).map((key) => {
       if (item[key]) {
         return (
           <a href={item[key].link} key={item[key].name}>
@@ -148,7 +152,7 @@ class Workplace extends Component<WorkplaceProps> {
               loading={projectLoading}
               bodyStyle={{ padding: 0 }}
             >
-              {projectNotice.map(item => (
+              {projectNotice.map((item) => (
                 <Card.Grid className={styles.projectGrid} key={item.id}>
                   <Card bodyStyle={{ padding: 0 }} bordered={false}>
                     <Card.Meta
@@ -181,7 +185,7 @@ class Workplace extends Component<WorkplaceProps> {
             >
               <List<ActivitiesType>
                 loading={activitiesLoading}
-                renderItem={item => this.renderActivities(item)}
+                renderItem={(item) => this.renderActivities(item)}
                 dataSource={activities}
                 className={styles.activitiesList}
                 size="large"

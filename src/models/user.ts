@@ -1,9 +1,17 @@
+/*
+ * @Author: Cookie
+ * @Date: 2020-08-06 13:57:23
+ * @LastEditors: Cookie
+ * @LastEditTime: 2020-08-07 10:13:16
+ * @FilePath: /fe-bp-ops/src/models/user.ts
+ * @Description: 
+ */
 import { Effect, Reducer } from 'umi';
 
 import { queryCurrent, query as queryUsers } from '@/services/user';
 
 export interface CurrentUser {
-  avatar?: string;
+  avatar_url?: string;
   name?: string;
   title?: string;
   group?: string;
@@ -42,17 +50,17 @@ const UserModel: UserModelType = {
 
   effects: {
     *fetch(_, { call, put }) {
-      const response = yield call(queryUsers);
+      const { data } = yield call(queryUsers);
       yield put({
         type: 'save',
-        payload: response,
+        payload: data,
       });
     },
     *fetchCurrent(_, { call, put }) {
-      const response = yield call(queryCurrent);
+      const { data } = yield call(queryCurrent);
       yield put({
         type: 'saveCurrentUser',
-        payload: response,
+        payload: data,
       });
     },
   },
