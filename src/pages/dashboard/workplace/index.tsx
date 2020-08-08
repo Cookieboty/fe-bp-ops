@@ -52,7 +52,7 @@ const PageHeaderContent: React.FC<{ currentUser: CurrentUser }> = ({ currentUser
           {currentUser.name}
           ，祝你开心每一天！
         </div>
-        <div>{currentUser.web_url}</div>
+        <div>{currentUser.projectUrl}</div>
       </div>
     </div>
   );
@@ -158,20 +158,20 @@ class Workplace extends Component<WorkplaceProps> {
                       title={
                         <div className={styles.cardTitle}>
                           <Avatar size="small" src={item.logo} />
-                          <a href={item.web_url} target="_blank">
-                            {item.name}
+                          <a href={item.projectUrl} target="_blank">
+                            {item.projectGitName}
                           </a>
                         </div>
                       }
-                      description={item.description ? item.description : '暂无备注'}
+                      description={item.projectGitDesc ? item.projectGitDesc : '暂无备注'}
                     />
                     <div className={styles.projectItemContent}>
-                      <a href={item.web_url} target="_blank">
-                        {item.name_with_namespace || ''}
+                      <a href={item.projectUrl} target="_blank">
+                        {item.nameWithNamespace || ''}
                       </a>
-                      {item.last_activity_at && (
-                        <span className={styles.datetime} title={item.last_activity_at}>
-                          {moment(item.last_activity_at).fromNow()}
+                      {item.lastActivityAt && (
+                        <span className={styles.datetime} title={item.lastActivityAt}>
+                          {moment(item.lastActivityAt).fromNow()}
                         </span>
                       )}
                     </div>

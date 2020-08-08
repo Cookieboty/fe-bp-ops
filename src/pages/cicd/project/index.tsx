@@ -1,7 +1,7 @@
 import React, { FC, useEffect } from 'react';
 import { Button, Card, Col, Form, List, Row, Input, Tag } from 'antd';
-import { LoadingOutlined, StarOutlined, LikeOutlined, MessageOutlined } from '@ant-design/icons';
-import { connect, Dispatch } from 'umi';
+import { BugOutlined, FormOutlined, CheckSquareOutlined } from '@ant-design/icons';
+import { connect, Dispatch, Link } from 'umi';
 import ArticleListContent from './components/ArticleListContent';
 import { StateType } from './model';
 import { ListItemDataType } from './data';
@@ -37,21 +37,21 @@ const Project: FC<ProjectProps> = ({ dispatch, project: { list }, loading }) => 
       case 'star-o':
         return (
           <span>
-            <StarOutlined style={{ marginRight: 8 }} />
+            <FormOutlined style={{ marginRight: 8 }} />
             {text}
           </span>
         );
       case 'like-o':
         return (
           <span>
-            <LikeOutlined style={{ marginRight: 8 }} />
+            <BugOutlined style={{ marginRight: 8 }} />
             {text}
           </span>
         );
       case 'message':
         return (
           <span>
-            <MessageOutlined style={{ marginRight: 8 }} />
+            <CheckSquareOutlined style={{ marginRight: 8 }} />
             {text}
           </span>
         );
@@ -89,21 +89,23 @@ const Project: FC<ProjectProps> = ({ dispatch, project: { list }, loading }) => 
             <List.Item
               key={item.id}
               actions={[
-                <IconText key="star" type="star-o" text={item.star || 0} />,
-                <IconText key="like" type="like-o" text={item.like || 0} />,
-                <IconText key="message" type="message" text={item.message || 0} />,
+                <IconText key="star" type="star-o" text={item.projectFeat || 0} />,
+                <IconText key="like" type="like-o" text={item.projectBugfix || 0} />,
+                <IconText key="message" type="message" text={item.projectRelease || 0} />,
               ]}
               extra={<div className={styles.listItemExtra} />}
             >
               <List.Item.Meta
                 title={
-                  <a className={styles.listItemMetaTitle} href={item.web_url} target="_blank">
-                    {item.name}
-                  </a>
+                  <Link className={styles.listItemMetaTitle} to={`projectDetail/${item.id}`}>
+                    {item.projectGitName}
+                  </Link>
                 }
                 description={
                   <span>
-                    <Tag>React</Tag>
+                    {item.projectType.map((type) => (
+                      <Tag>{type}</Tag>
+                    ))}
                   </span>
                 }
               />

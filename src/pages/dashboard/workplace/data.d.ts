@@ -58,13 +58,13 @@ export interface GeographicType {
 
 export interface NoticeType {
   id: string;
-  name: string;
+  projectGitName: string;
   logo: string;
-  description: string;
-  last_activity_at: string;
+  projectGitDesc: string;
+  lastActivityAt: string;
   member: string;
-  web_url: string;
-  name_with_namespace: string;
+  projectUrl: string;
+  nameWithNamespace: string;
 }
 
 export interface CurrentUser {
@@ -83,7 +83,7 @@ export interface CurrentUser {
   geographic: GeographicType;
   address: string;
   phone: string;
-  web_url: string;
+  projectUrl: string;
 }
 
 export interface Member {

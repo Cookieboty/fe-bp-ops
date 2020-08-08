@@ -2,13 +2,13 @@
  * @Author: Cookie
  * @Date: 2020-08-06 21:46:04
  * @LastEditors: Cookie
- * @LastEditTime: 2020-08-07 21:31:03
+ * @LastEditTime: 2020-08-08 11:24:54
  * @Description:
  */
 import { Effect, Reducer } from 'umi';
 import { ActivitiesType, CurrentUser, NoticeType, RadarDataType } from './data';
 import { queryCurrent } from '@/services/user';
-import { queryProject } from '@/services/project';
+import { queryProjectList } from '@/services/project';
 
 export interface ModalState {
   currentUser?: CurrentUser;
@@ -20,16 +20,14 @@ export interface ModalState {
 export interface ModelType {
   namespace: string;
   state: ModalState;
-  reducers: {
-    save: Reducer<ModalState>;
-    clear: Reducer<ModalState>;
-  };
   effects: {
     init: Effect;
     fetchUserCurrent: Effect;
     fetchProjectNotice: Effect;
-    fetchActivitiesList: Effect;
-    fetchChart: Effect;
+  };
+  reducers: {
+    save: Reducer<ModalState>;
+    clear: Reducer<ModalState>;
   };
 }
 
@@ -56,7 +54,7 @@ const Model: ModelType = {
       });
     },
     *fetchProjectNotice(_, { call, put }) {
-      const { data } = yield call(queryProject, { pageSize: 9, pageNum: 1 });
+      const { data } = yield call(queryProjectList, { pageSize: 9, pageNum: 1 });
       yield put({
         type: 'save',
         payload: {

@@ -2,20 +2,31 @@
  * @Author: Cookie
  * @Date: 2020-08-06 13:57:23
  * @LastEditors: Cookie
- * @LastEditTime: 2020-08-07 21:30:42
+ * @LastEditTime: 2020-08-08 11:20:34
  * @FilePath: /fe-bp-ops/src/services/user.ts
  * @Description:
  */
 
 import request from '@/utils/request';
 
-export interface ProjectParamsType {
+export interface ProjectListParamsType {
   pageSize: Number;
   pageNum: Number;
 }
 
-export async function queryProject(params: ProjectParamsType) {
+export interface ProjectParamsType {
+  projectId: String;
+}
+
+export async function queryProjectList(params: ProjectListParamsType) {
   return request('/project/getList', {
+    method: 'GET',
+    params,
+  });
+}
+
+export async function queryProject(params: ProjectParamsType) {
+  return request('/project/get', {
     method: 'GET',
     params,
   });
