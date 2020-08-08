@@ -2,7 +2,7 @@
  * @Author: Cookie
  * @Date: 2020-08-08 09:41:44
  * @LastEditors: Cookie
- * @LastEditTime: 2020-08-08 11:27:23
+ * @LastEditTime: 2020-08-08 16:34:09
  * @Description:
  */
 import { Effect, Reducer } from 'umi';
@@ -44,7 +44,13 @@ const Model: ModelType = {
       });
     },
     *fetchBranchList({ payload }, { call, put }) {
-      const { data } = yield call(queryBranchList, payload);
+      const {
+        project: { id },
+      } = payload;
+      if (!id) return;
+      const { data } = yield call(queryBranchList, {
+        projectId: id,
+      });
       yield put({
         type: 'queryBranch',
         payload: Array.isArray(data) ? data : [],

@@ -19,9 +19,9 @@ import { findDOMNode } from 'react-dom';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect, Dispatch } from 'umi';
 import moment from 'moment';
-import OperationModal from './components/OperationModal';
+import VersionModal from './components/VersionModal';
 import { StateType } from './model';
-import { ProjectDetailDataType } from './data';
+import { BranchDataType } from './data';
 import styles from './style.less';
 
 const RadioButton = Radio.Button;
@@ -47,22 +47,37 @@ const Info: FC<{
   </div>
 );
 
-const ListContent = ({
-  data: { owner, createdAt, percent, status },
-}: {
-  data: ProjectDetailDataType;
-}) => (
+const ListContent = ({ data: { commit, branchStatus } }: { data: BranchDataType }) => (
   <div className={styles.listContent}>
     <div className={styles.listContentItem}>
-      <span>Owner</span>
-      <p>{owner}</p>
+      <span>最后提交人</span>
+      <p>{commit.author_name}</p>
     </div>
     <div className={styles.listContentItem}>
-      <span>开始时间</span>
-      <p>{moment(createdAt).format('YYYY-MM-DD HH:mm')}</p>
+      <span>最后更新时间</span>
+      <p>{moment(commit.committed_date).format('YYYY-MM-DD HH:mm')}</p>
     </div>
-    <div className={styles.listContentItem}>
-      <Progress percent={percent} status={status} strokeWidth={6} style={{ width: 180 }} />
+    <div className={styles.listContentItem} style={{ width: '100px' }}>
+      {(() => {
+        switch (branchStatus) {
+          case 0:
+            return <Progress size="small" percent={25} format={() => '开发中'} />;
+          case 1:
+            return (
+              <Progress size="small" percent={25} successPercent={25} format={() => '已提测'} />
+            );
+          case 2:
+            return (
+              <Progress size="small" percent={50} successPercent={25} format={() => '测试中'} />
+            );
+          case 3:
+            return <Progress size="small" percent={75} successPercent={50} format={() => '预发'} />;
+          case 4:
+            return <Progress size="small" percent={100} format={() => '已上线'} />;
+          default:
+            return '暂无';
+        }
+      })()}
     </div>
   </div>
 );
@@ -79,11 +94,10 @@ export const ProjectDetail: FC<ProjectDetailProps> = (props) => {
   const [done, setDone] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
   const [current, setCurrent] = useState<Partial<ProjectDetailItemDataType> | undefined>(undefined);
+
   const {
     params: { projectId },
   } = match;
-
-  console.log(projectId);
 
   useEffect(() => {
     dispatch({
@@ -93,6 +107,15 @@ export const ProjectDetail: FC<ProjectDetailProps> = (props) => {
       },
     });
   }, [projectId]);
+
+  useEffect(() => {
+    dispatch({
+      type: 'projectDetail/fetchBranchList',
+      payload: {
+        project,
+      },
+    });
+  }, [project]);
 
   const paginationProps = {
     pageSize: 5,
@@ -104,7 +127,7 @@ export const ProjectDetail: FC<ProjectDetailProps> = (props) => {
     setCurrent(undefined);
   };
 
-  const showEditModal = (item: ProjectDetailItemDataType) => {
+  const showEditModal = (item: BranchDataType) => {
     setVisible(true);
     setCurrent(item);
   };
@@ -116,12 +139,12 @@ export const ProjectDetail: FC<ProjectDetailProps> = (props) => {
     });
   };
 
-  const editAndDelete = (key: string, currentItem: ProjectDetailItemDataType) => {
+  const editAndDelete = (key: string, currentItem: BranchDataType) => {
     if (key === 'edit') showEditModal(currentItem);
     else if (key === 'delete') {
       Modal.confirm({
-        title: '删除任务',
-        content: '确定删除该任务吗？',
+        title: '删除分支',
+        content: '确定删除该分支吗？（流程中的分支不能删除）',
         okText: '确认',
         cancelText: '取消',
         onOk: () => deleteItem(currentItem.id),
@@ -133,21 +156,37 @@ export const ProjectDetail: FC<ProjectDetailProps> = (props) => {
     <div className={styles.extraContent}>
       <RadioGroup defaultValue="all">
         <RadioButton value="all">全部</RadioButton>
-        <RadioButton value="progress">进行中</RadioButton>
-        <RadioButton value="waiting">等待中</RadioButton>
+        <RadioButton value="dev">开发中</RadioButton>
+        <RadioButton value="testing">测试中</RadioButton>
+        <RadioButton value="pre">预发</RadioButton>
+        <RadioButton value="prod">已上线</RadioButton>
       </RadioGroup>
       <Search className={styles.extraContentSearch} placeholder="请输入" onSearch={() => ({})} />
     </div>
   );
 
   const MoreBtn: React.FC<{
-    item: ProjectDetailItemDataType;
+    item: BranchDataType;
   }> = ({ item }) => (
     <Dropdown
       overlay={
         <Menu onClick={({ key }) => editAndDelete(key, item)}>
-          <Menu.Item key="edit">编辑</Menu.Item>
-          <Menu.Item key="delete">删除</Menu.Item>
+          {(() => {
+            switch (item.branchStatus) {
+              case 0:
+                return <Menu.Item key="delete">删除</Menu.Item>;
+              case 1:
+                return <Menu.Item key="delete">删除</Menu.Item>;
+              case 2:
+                return <Menu.Item key="delete">删除</Menu.Item>;
+              case 3:
+                return <Menu.Item key="delete">删除</Menu.Item>;
+              case 4:
+                return <Menu.Item key="delete">删除</Menu.Item>;
+              default:
+                return <Menu.Item key="delete">删除</Menu.Item>;
+            }
+          })()}
         </Menu>
       }
     >
@@ -196,13 +235,13 @@ export const ProjectDetail: FC<ProjectDetailProps> = (props) => {
           <Card bordered={false}>
             <Row>
               <Col sm={8} xs={24}>
-                <Info title="我的待办" value="8个任务" bordered />
+                <Info title="流程中" value="8" bordered />
               </Col>
               <Col sm={8} xs={24}>
-                <Info title="本周任务平均处理时间" value="32分钟" bordered />
+                <Info title="快逾期流程" value="2" bordered />
               </Col>
               <Col sm={8} xs={24}>
-                <Info title="本周完成任务数" value="24个任务" />
+                <Info title="已完成流程" value="24" />
               </Col>
             </Row>
           </Card>
@@ -210,7 +249,7 @@ export const ProjectDetail: FC<ProjectDetailProps> = (props) => {
           <Card
             className={styles.listCard}
             bordered={false}
-            title="基本列表"
+            title="分支列表"
             style={{ marginTop: 24 }}
             bodyStyle={{ padding: '0 32px 40px 32px' }}
             extra={extraContent}
@@ -222,7 +261,7 @@ export const ProjectDetail: FC<ProjectDetailProps> = (props) => {
               ref={addBtn}
             >
               <PlusOutlined />
-              添加
+              创建分支
             </Button>
 
             <List
@@ -241,15 +280,14 @@ export const ProjectDetail: FC<ProjectDetailProps> = (props) => {
                         showEditModal(item);
                       }}
                     >
-                      编辑
+                      提测
                     </a>,
                     <MoreBtn key="more" item={item} />,
                   ]}
                 >
                   <List.Item.Meta
-                    avatar={<Avatar src={item.logo} shape="square" size="large" />}
-                    title={<a href={item.href}>{item.title}</a>}
-                    description={item.subDescription}
+                    title={<a href={item.href}>{item.branchGitName}</a>}
+                    description={item.branchName}
                   />
                   <ListContent data={item} />
                 </List.Item>
@@ -259,7 +297,7 @@ export const ProjectDetail: FC<ProjectDetailProps> = (props) => {
         </div>
       </PageHeaderWrapper>
 
-      <OperationModal
+      <VersionModal
         done={done}
         current={current}
         visible={visible}
