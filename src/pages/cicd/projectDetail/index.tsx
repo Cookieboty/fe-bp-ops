@@ -117,10 +117,10 @@ export const ProjectDetail: FC<ProjectDetailProps> = (props) => {
     });
   }, [project]);
 
-  const paginationProps = {
-    pageSize: 5,
-    total: 50,
-  };
+  // const paginationProps = {
+  //   pageSize: 5,
+  //   total: 50,
+  // };
 
   const showModal = () => {
     setVisible(true);
@@ -268,7 +268,6 @@ export const ProjectDetail: FC<ProjectDetailProps> = (props) => {
               size="large"
               rowKey="id"
               loading={loading}
-              pagination={paginationProps}
               dataSource={branchList}
               renderItem={(item) => (
                 <List.Item

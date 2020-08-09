@@ -42,7 +42,7 @@ window.onload = function () {
   const socket = io('http://127.0.0.1:7001', {
     // 实际使用中可以在这里传递参数
     query: {
-      room: 'demo',
+      room: 'nsp',
       userId: `client_${Math.random()}`,
     },
 

@@ -117,9 +117,7 @@ const VersionEditComponent: FC<VersionEditComponentProps> = ({
                 </Option>
               ))}
           </Select>
-          ,
         </Form.Item>
-
         <Form.Item label="更新类型" name="type" initialValue={3}>
           <p>当前版本号：{currentVersion}</p>
           <Radio.Group onChange={(ev) => onTypeChange(ev.target.value)}>
