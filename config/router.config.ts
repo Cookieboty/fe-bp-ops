@@ -2,7 +2,7 @@
  * @Author: Cookie
  * @Date: 2020-08-06 21:46:04
  * @LastEditors: Cookie
- * @LastEditTime: 2020-08-08 10:45:01
+ * @LastEditTime: 2020-08-15 20:01:49
  * @Description:
  */
 export default [
@@ -63,6 +63,23 @@ export default [
                 name: '工程详情',
                 hideInMenu: true,
                 component: './CICD/projectDetail',
+              },
+            ],
+          },
+          {
+            path: '/program',
+            name: '项目管理',
+            icon: 'project',
+            routes: [
+              {
+                path: '/program',
+                redirect: '/cicd/list',
+              },
+              {
+                name: '流程中心',
+                icon: 'smile',
+                path: '/program/list',
+                component: './program/programList',
               },
             ],
           },

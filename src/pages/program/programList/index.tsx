@@ -28,8 +28,13 @@ const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 const { Search } = Input;
 
+interface PagingProps {
+  pageSize: number;
+  pageNum: number;
+}
+
 interface ProjectDetailProps {
-  projectDetail: StateType;
+  programList: StateType;
   dispatch: Dispatch<any>;
   loading: boolean;
   match: any;
@@ -82,45 +87,28 @@ const ListContent = ({ data: { commit, branchStatus } }: { data: BranchDataType 
   </div>
 );
 
-export const ProjectDetail: FC<ProjectDetailProps> = (props) => {
+export const programList: FC<ProjectDetailProps> = (props) => {
   const addBtn = useRef(null);
   const {
     loading,
     dispatch,
-    projectDetail: { branchList, project },
-    match,
+    programList: { processList },
   } = props;
 
   const [done, setDone] = useState<boolean>(false);
+  const [paging, setPaging] = useState<PagingProps>({
+    pageNum: 1,
+    pageSize: 10,
+  });
   const [visible, setVisible] = useState<boolean>(false);
   const [current, setCurrent] = useState<Partial<ProjectDetailItemDataType> | undefined>(undefined);
 
-  const {
-    params: { projectId },
-  } = match;
-
   useEffect(() => {
     dispatch({
-      type: 'projectDetail/fetchProject',
-      payload: {
-        projectId,
-      },
+      type: 'programList/fetchProcessList',
+      payload: { ...paging },
     });
-  }, [projectId]);
-
-  useEffect(() => {
-    dispatch({
-      type: 'projectDetail/fetchBranchList',
-      payload: {
-        project,
-      },
-    });
-  }, [project]);
-
-  // const paginationProps = {
-  //   pageSize: 5,
-  //   total: 50,
-  // };
+  }, [paging]);
 
   const showModal = () => {
     setVisible(true);
@@ -138,7 +126,7 @@ export const ProjectDetail: FC<ProjectDetailProps> = (props) => {
 
   const deleteItem = (id: string) => {
     dispatch({
-      type: 'ProjectDetail/submit',
+      type: 'programList/submit',
       payload: { id },
     });
   };
@@ -147,8 +135,8 @@ export const ProjectDetail: FC<ProjectDetailProps> = (props) => {
     if (key === 'edit') showEditModal(currentItem);
     else if (key === 'delete') {
       Modal.confirm({
-        title: '删除分支',
-        content: '确定删除该分支吗？（流程中的分支不能删除）',
+        title: '删除流程',
+        content: '确定删除该流程吗？（流程中的流程不能删除）',
         okText: '确认',
         cancelText: '取消',
         onOk: () => deleteItem(currentItem.id),
@@ -226,7 +214,7 @@ export const ProjectDetail: FC<ProjectDetailProps> = (props) => {
 
     setDone(true);
     dispatch({
-      type: 'ProjectDetail/submit',
+      type: 'programList/submit',
       payload: { id, ...values },
     });
   };
@@ -252,7 +240,7 @@ export const ProjectDetail: FC<ProjectDetailProps> = (props) => {
           <Card
             className={styles.listCard}
             bordered={false}
-            title="分支列表"
+            title="流程列表"
             style={{ marginTop: 24 }}
             bodyStyle={{ padding: '0 32px 40px 32px' }}
             extra={extraContent}
@@ -264,14 +252,14 @@ export const ProjectDetail: FC<ProjectDetailProps> = (props) => {
               ref={addBtn}
             >
               <PlusOutlined />
-              创建分支
+              创建流程
             </Button>
 
             <List
               size="large"
               rowKey="id"
               loading={loading}
-              dataSource={branchList}
+              dataSource={processList}
               renderItem={(item) => (
                 <List.Item
                   actions={[
@@ -314,15 +302,15 @@ export const ProjectDetail: FC<ProjectDetailProps> = (props) => {
 
 export default connect(
   ({
-    projectDetail,
+    programList,
     loading,
   }: {
-    projectDetail: StateType;
+    programList: StateType;
     loading: {
       models: { [key: string]: boolean };
     };
   }) => ({
-    projectDetail,
-    loading: loading.models.projectDetail,
+    programList,
+    loading: loading.models.programList,
   }),
-)(ProjectDetail);
+)(programList);
