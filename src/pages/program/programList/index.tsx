@@ -55,9 +55,10 @@ const Info: FC<{
 
 const ListContent = ({ data }: { data: ProcessDataType }) => (
   <div className={styles.listContent}>
-    {/* <div className={styles.listContentItem}>
-      <span>提测分支</span>{' '}
-    </div> */}
+    <div className={styles.listContentItem}>
+      <span>创建人</span>
+      <p>{data.createdUser}</p>
+    </div>
     <div className={styles.listContentItem}>
       <span>最后修改人</span>
       <p>{data.updateUser}</p>
