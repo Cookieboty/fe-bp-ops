@@ -13,6 +13,7 @@ import {
   Progress,
   Radio,
   Row,
+  Tag,
 } from 'antd';
 
 import { findDOMNode } from 'react-dom';
@@ -21,7 +22,7 @@ import { connect, Dispatch } from 'umi';
 import moment from 'moment';
 import VersionModal from './components/VersionModal';
 import { StateType } from './model';
-import { BranchDataType } from './data';
+import { ProcessDataType } from './data';
 import styles from './style.less';
 
 const RadioButton = Radio.Button;
@@ -52,19 +53,22 @@ const Info: FC<{
   </div>
 );
 
-const ListContent = ({ data: { commit, branchStatus } }: { data: BranchDataType }) => (
+const ListContent = ({ data }: { data: ProcessDataType }) => (
   <div className={styles.listContent}>
+    {/* <div className={styles.listContentItem}>
+      <span>提测分支</span>{' '}
+    </div> */}
     <div className={styles.listContentItem}>
-      <span>最后提交人</span>
-      <p>{commit.author_name}</p>
+      <span>最后修改人</span>
+      <p>{data.updateUser}</p>
     </div>
     <div className={styles.listContentItem}>
       <span>最后更新时间</span>
-      <p>{moment(commit.committed_date).format('YYYY-MM-DD HH:mm')}</p>
+      <p>{moment(data.updatedAt).format('YYYY-MM-DD HH:mm')}</p>
     </div>
     <div className={styles.listContentItem} style={{ width: '100px' }}>
       {(() => {
-        switch (branchStatus) {
+        switch (data.processStatus) {
           case 0:
             return <Progress size="small" percent={25} format={() => '开发中'} />;
           case 1:
@@ -87,7 +91,7 @@ const ListContent = ({ data: { commit, branchStatus } }: { data: BranchDataType 
   </div>
 );
 
-export const programList: FC<ProjectDetailProps> = (props) => {
+export const ProgramList: FC<ProjectDetailProps> = (props) => {
   const addBtn = useRef(null);
   const {
     loading,
@@ -110,12 +114,14 @@ export const programList: FC<ProjectDetailProps> = (props) => {
     });
   }, [paging]);
 
+  console.log(processList);
+
   const showModal = () => {
     setVisible(true);
     setCurrent(undefined);
   };
 
-  const showEditModal = (item: BranchDataType) => {
+  const showEditModal = (item: ProcessDataType) => {
     setVisible(true);
     setCurrent(item);
   };
@@ -131,7 +137,7 @@ export const programList: FC<ProjectDetailProps> = (props) => {
     });
   };
 
-  const editAndDelete = (key: string, currentItem: BranchDataType) => {
+  const editAndDelete = (key: string, currentItem: ProcessDataType) => {
     if (key === 'edit') showEditModal(currentItem);
     else if (key === 'delete') {
       Modal.confirm({
@@ -158,7 +164,7 @@ export const programList: FC<ProjectDetailProps> = (props) => {
   );
 
   const MoreBtn: React.FC<{
-    item: BranchDataType;
+    item: ProcessDataType;
   }> = ({ item }) => (
     <Dropdown
       overlay={
@@ -276,8 +282,14 @@ export const programList: FC<ProjectDetailProps> = (props) => {
                   ]}
                 >
                   <List.Item.Meta
-                    title={<a href={item.href}>{item.branchGitName}</a>}
-                    description={item.branchName}
+                    title={<p>{item.name}</p>}
+                    description={
+                      <p>
+                        {item.branches.map((branch) => {
+                          return <Tag color="volcano">{branch.branchName}</Tag>;
+                        })}
+                      </p>
+                    }
                   />
                   <ListContent data={item} />
                 </List.Item>
@@ -313,4 +325,4 @@ export default connect(
     programList,
     loading: loading.models.programList,
   }),
-)(programList);
+)(ProgramList);

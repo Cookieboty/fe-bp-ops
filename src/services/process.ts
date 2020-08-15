@@ -2,7 +2,7 @@
  * @Author: Cookie
  * @Date: 2020-08-06 13:57:23
  * @LastEditors: Cookie
- * @LastEditTime: 2020-08-15 21:06:19
+ * @LastEditTime: 2020-08-15 21:24:45
  * @FilePath: /fe-bp-ops/src/services/user.ts
  * @Description:
  */
@@ -39,6 +39,13 @@ export async function queryProcessList(params: ProjectListParamsType) {
 
 export async function queryProject(params: ProjectParamsType) {
   return request('/project/get', {
+    method: 'GET',
+    params,
+  });
+}
+
+export async function queryWorkflowList(params: ProjectParamsType) {
+  return request('/workflowTpl/getList', {
     method: 'GET',
     params,
   });

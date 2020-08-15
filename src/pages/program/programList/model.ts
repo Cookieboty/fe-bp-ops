@@ -2,16 +2,16 @@
  * @Author: Cookie
  * @Date: 2020-08-08 09:41:44
  * @LastEditors: Cookie
- * @LastEditTime: 2020-08-15 21:15:29
+ * @LastEditTime: 2020-08-15 22:48:47
  * @Description:
  */
 import { Effect, Reducer } from 'umi';
 import { queryProcessList } from '@/services/process';
 
-import { BranchDataType } from './data';
+import { ProcessDataType } from './data';
 
 export interface StateType {
-  processList?: BranchDataType[];
+  processList?: ProcessDataType[];
 }
 
 export interface ModelType {
@@ -38,8 +38,8 @@ const Model: ModelType = {
         pageNum,
       });
       yield put({
-        type: 'queryProcess',
-        payload: Array.isArray(data) ? data : [],
+        type: 'queryProcessList',
+        payload: Array.isArray(data.rows) ? data.rows : [],
       });
     },
   },
