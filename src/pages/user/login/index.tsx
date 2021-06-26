@@ -1,10 +1,13 @@
 import { Alert, Checkbox } from 'antd';
 import React, { useState } from 'react';
-import { Dispatch, connect } from 'umi';
-import { StateType } from './model';
+import type { Dispatch } from 'umi';
+import { connect, Link } from 'umi';
+import type { StateType } from './model';
 import styles from './style.less';
-import { LoginParamsType } from '@/services/login';
+import type { LoginParamsType } from '@/services/login';
 import LoginFrom from './components/Login';
+
+import { GitlabOutlined } from '@ant-design/icons'
 
 const { Tab, UserName, Password, Submit } = LoginFrom;
 
@@ -84,15 +87,15 @@ const Login: React.FC<LoginProps> = (props) => {
           </a>
         </div>
         <Submit loading={submitting}>登录</Submit>
-        {/* <div className={styles.other}>
+        <div className={styles.other}>
           其他登录方式
-          <AlipayCircleOutlined className={styles.icon} />
-          <TaobaoCircleOutlined className={styles.icon} />
-          <WeiboCircleOutlined className={styles.icon} />
+          <a href='http://gitlab.cookieboty.com/oauth/authorize?client_id=606e33d507674f99d1ac16877766eca0db448c26a6fdddf5b76e850dac0d2421&redirect_uri=http://devops.cookieboty.com/user/getTokenByApp&response_type=code' >
+            <GitlabOutlined className={styles.icon} />
+          </a>
           <Link className={styles.register} to="/user/register">
             注册账户
           </Link>
-        </div> */}
+        </div>
       </LoginFrom>
     </div>
   );
@@ -105,9 +108,7 @@ export default connect(
   }: {
     userAndlogin: StateType;
     loading: {
-      effects: {
-        [key: string]: boolean;
-      };
+      effects: Record<string, boolean>;
     };
   }) => ({
     userAndlogin,

@@ -1,4 +1,5 @@
-import React, { FC, useRef, useState, useEffect } from 'react';
+import type { FC } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { DownOutlined, PlusOutlined } from '@ant-design/icons';
 import {
   Avatar,
@@ -15,37 +16,26 @@ import {
   Row,
 } from 'antd';
 
-import { findDOMNode } from 'react-dom';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { connect, Dispatch } from 'umi';
+import type { Dispatch } from 'umi';
+import { connect } from 'umi';
 import moment from 'moment';
 import VersionModal from './components/VersionModal';
-import { StateType } from './model';
-import { BranchDataType } from './data';
+import type { StateType } from './model';
+import type { BranchDataType } from './data';
 import styles from './style.less';
 
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 const { Search } = Input;
 
-interface ProjectDetailProps {
+interface IProjectDetailProps {
   projectDetail: StateType;
-  dispatch: Dispatch<any>;
+  dispatch: Dispatch;
   loading: boolean;
   match: any;
 }
 
-const Info: FC<{
-  title: React.ReactNode;
-  value: React.ReactNode;
-  bordered?: boolean;
-}> = ({ title, value, bordered }) => (
-  <div className={styles.headerInfo}>
-    <span>{title}</span>
-    <p>{value}</p>
-    {bordered && <em />}
-  </div>
-);
 
 const ListContent = ({ data: { commit, branchStatus } }: { data: BranchDataType }) => (
   <div className={styles.listContent}>
@@ -82,7 +72,7 @@ const ListContent = ({ data: { commit, branchStatus } }: { data: BranchDataType 
   </div>
 );
 
-export const ProjectDetail: FC<ProjectDetailProps> = (props) => {
+export const ProjectDetail: FC<IProjectDetailProps> = (props) => {
   const addBtn = useRef(null);
   const {
     loading,
@@ -93,7 +83,7 @@ export const ProjectDetail: FC<ProjectDetailProps> = (props) => {
 
   const [done, setDone] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
-  const [current, setCurrent] = useState<Partial<ProjectDetailItemDataType> | undefined>(undefined);
+  const [current, setCurrent] = useState<Partial<BranchDataType> | undefined>(undefined);
 
   const {
     params: { projectId },
@@ -106,7 +96,7 @@ export const ProjectDetail: FC<ProjectDetailProps> = (props) => {
         projectId,
       },
     });
-  }, [projectId]);
+  }, [projectId, dispatch]);
 
   useEffect(() => {
     dispatch({
@@ -115,12 +105,7 @@ export const ProjectDetail: FC<ProjectDetailProps> = (props) => {
         project,
       },
     });
-  }, [project]);
-
-  // const paginationProps = {
-  //   pageSize: 5,
-  //   total: 50,
-  // };
+  }, [project, dispatch]);
 
   const showModal = () => {
     setVisible(true);
@@ -169,6 +154,77 @@ export const ProjectDetail: FC<ProjectDetailProps> = (props) => {
     </div>
   );
 
+
+  const submitTest = (values: BranchDataType) => {
+    dispatch({
+      type: 'projectDetail/submitTest',
+      payload: { ...values },
+    });
+  }
+
+  const deploy = (values: BranchDataType) => {
+    dispatch({
+      type: 'projectDetail/deploy',
+      payload: { ...values },
+    });
+  }
+
+  const ActionsBtn: React.FC<{ item: BranchDataType; }> = ({ item }) => {
+    const { branchStatus } = item
+    switch (branchStatus) {
+      case 0:
+        return (
+          <a
+            key="edit"
+            onClick={(e) => {
+              e.preventDefault();
+              submitTest(item);
+            }}
+          >
+            提测
+          </a>
+        )
+      case 1:
+        return (
+          <a
+            key="edit"
+            onClick={(e) => {
+              e.preventDefault();
+              deploy(item);
+            }}
+          >
+            发布
+          </a>
+        );
+      case 2:
+        return (
+          <a
+            key="edit"
+            onClick={(e) => {
+              e.preventDefault();
+              submitTest(item);
+            }}
+          >
+            预发
+          </a>
+        );
+      case 3:
+        return (
+          <a
+            key="edit"
+            onClick={(e) => {
+              e.preventDefault();
+              submitTest(item);
+            }}
+          >
+            生产
+          </a>
+        )
+      default:
+        return <></>;
+    }
+  }
+
   const MoreBtn: React.FC<{
     item: BranchDataType;
   }> = ({ item }) => (
@@ -200,54 +256,29 @@ export const ProjectDetail: FC<ProjectDetailProps> = (props) => {
     </Dropdown>
   );
 
-  const setAddBtnblur = () => {
-    if (addBtn.current) {
-      // eslint-disable-next-line react/no-find-dom-node
-      const addBtnDom = findDOMNode(addBtn.current) as HTMLButtonElement;
-      setTimeout(() => addBtnDom.blur(), 0);
-    }
-  };
 
   const handleDone = () => {
-    setAddBtnblur();
     setDone(false);
     setVisible(false);
   };
 
   const handleCancel = () => {
-    setAddBtnblur();
     setVisible(false);
   };
 
-  const handleSubmit = (values: ProjectDetailItemDataType) => {
-    const id = current ? current.id : '';
-
-    setAddBtnblur();
-
+  const handleSubmit = (values: BranchDataType) => {
     setDone(true);
     dispatch({
       type: 'ProjectDetail/submit',
-      payload: { id, ...values },
+      payload: { ...values },
     });
   };
+
 
   return (
     <div>
       <PageHeaderWrapper>
         <div className={styles.standardList}>
-          <Card bordered={false}>
-            <Row>
-              <Col sm={8} xs={24}>
-                <Info title="流程中" value="8" bordered />
-              </Col>
-              <Col sm={8} xs={24}>
-                <Info title="快逾期流程" value="2" bordered />
-              </Col>
-              <Col sm={8} xs={24}>
-                <Info title="已完成流程" value="24" />
-              </Col>
-            </Row>
-          </Card>
 
           <Card
             className={styles.listCard}
@@ -275,15 +306,7 @@ export const ProjectDetail: FC<ProjectDetailProps> = (props) => {
               renderItem={(item) => (
                 <List.Item
                   actions={[
-                    <a
-                      key="edit"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        showEditModal(item);
-                      }}
-                    >
-                      提测
-                    </a>,
+                    <ActionsBtn item={item} />,
                     <MoreBtn key="more" item={item} />,
                   ]}
                 >
@@ -319,7 +342,7 @@ export default connect(
   }: {
     projectDetail: StateType;
     loading: {
-      models: { [key: string]: boolean };
+      models: Record<string, boolean>;
     };
   }) => ({
     projectDetail,

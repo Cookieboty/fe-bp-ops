@@ -1,5 +1,6 @@
 import { stringify } from 'querystring';
-import { history, Reducer, Effect } from 'umi';
+import type { Reducer, Effect } from 'umi';
+import { history } from 'umi';
 
 import { fakeAccountLogin } from '@/services/login';
 import { setAuthority } from '@/utils/authority';

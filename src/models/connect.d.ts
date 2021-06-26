@@ -1,13 +1,13 @@
-import { MenuDataItem, Settings as ProSettings } from '@ant-design/pro-layout';
+import type { MenuDataItem, Settings as ProSettings } from '@ant-design/pro-layout';
 import { GlobalModelState } from './global';
 import { UserModelState } from './user';
-import { StateType } from './login';
+import type { StateType } from './login';
 
 export { GlobalModelState, UserModelState };
 
 export interface Loading {
   global: boolean;
-  effects: { [key: string]: boolean | undefined };
+  effects: Record<string, boolean | undefined>;
   models: {
     global?: boolean;
     menu?: boolean;

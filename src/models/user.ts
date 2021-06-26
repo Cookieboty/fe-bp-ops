@@ -2,11 +2,11 @@
  * @Author: Cookie
  * @Date: 2020-08-06 13:57:23
  * @LastEditors: Cookie
- * @LastEditTime: 2020-08-07 10:13:16
+ * @LastEditTime: 2021-06-26 18:12:58
  * @FilePath: /fe-bp-ops/src/models/user.ts
  * @Description: 
  */
-import { Effect, Reducer } from 'umi';
+import type { Effect, Reducer } from 'umi';
 
 import { queryCurrent, query as queryUsers } from '@/services/user';
 
