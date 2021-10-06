@@ -1,8 +1,8 @@
 /*
  * @Author: Cookie
  * @Date: 2020-08-06 13:57:23
- * @LastEditors: Cookie
- * @LastEditTime: 2020-08-06 14:44:35
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-10-06 11:20:07
  * @FilePath: /fe-bp-ops/config/config.ts
  * @Description: 
  */
@@ -15,6 +15,7 @@ const { REACT_APP_ENV } = process.env;
 
 export default defineConfig({
   hash: true,
+  devtool: 'source-map',
   antd: {},
   dva: {
     hmr: true,

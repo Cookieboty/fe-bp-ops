@@ -1,8 +1,8 @@
 /*
  * @Author: Cookie
  * @Date: 2020-08-06 13:57:23
- * @LastEditors: Cookie
- * @LastEditTime: 2020-08-06 15:45:06
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-10-06 08:35:10
  * @FilePath: /fe-bp-ops/config/proxy.ts
  * @Description: 
  */
@@ -10,7 +10,7 @@
 export default {
   dev: {
     '/api/': {
-      target: 'http://127.0.0.1:7001',
+      target: 'http://192.168.160.88:1001',
       changeOrigin: true,
       pathRewrite: { '^/api/': '/' },
     },

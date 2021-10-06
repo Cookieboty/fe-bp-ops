@@ -1,0 +1,8 @@
+[defaults]
+url=http://192.168.160.88:9000
+
+[auth]
+​\r\n[defaults]\r\nurl=http://192.168.160.88:9000
+project=fe-bp-ops
+org=sentry
+token=bd688046f6fc432daa7e7ab0e237a73bf175367364d14fe295879683a6fd1770

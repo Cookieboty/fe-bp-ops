@@ -10,10 +10,9 @@ import { renderClient } from 'D:/ig/fe-bp-ops/node_modules/_@umijs_renderer-reac
 
 require('../global.less');
 require('./plugin-locale/locale')._onCreate();
+
 (() => {
   // Runtime block add component
-  window.GUmiUIFlag = require('D:/ig/fe-bp-ops/node_modules/_@umijs_plugin-ui-blocks@2.2.5@@umijs/plugin-ui-blocks/lib/sdk/flagBabelPlugin/GUmiUIFlag.js').default;
-
   // Enable/Disable block add edit mode
   window.addEventListener(
     'message',
@@ -38,7 +37,7 @@ require('./plugin-locale/locale')._onCreate();
           default:
             break;
         }
-      } catch (e) {}
+      } catch (e) { }
     },
     false,
   );
@@ -71,29 +70,29 @@ const clientRender = getClientRender();
 export default clientRender();
 
 
-    window.g_umi = {
-      version: '3.2.14',
-    };
-  
+window.g_umi = {
+  version: '3.2.14',
+};
 
-    (() => {
-      try {
-        const ua = window.navigator.userAgent;
-        const isIE = ua.indexOf('MSIE ') > -1 || ua.indexOf('Trident/') > -1;
-        if (isIE) return;
 
-        // Umi UI Bubble
-        require('D:/ig/fe-bp-ops/node_modules/_@umijs_preset-ui@2.2.6@@umijs/preset-ui/lib/bubble').default({
-          port: 3000,
-          path: 'D:/ig/fe-bp-ops',
-          currentProject: '',
-          isBigfish: undefined,
-        });
-      } catch (e) {
-        console.warn('Umi UI render error:', e);
-      }
-    })();
-  
+(() => {
+  try {
+    const ua = window.navigator.userAgent;
+    const isIE = ua.indexOf('MSIE ') > -1 || ua.indexOf('Trident/') > -1;
+    if (isIE) return;
+
+    // Umi UI Bubble
+    require('D:/ig/fe-bp-ops/node_modules/_@umijs_preset-ui@2.2.6@@umijs/preset-ui/lib/bubble').default({
+      port: 3000,
+      path: 'D:/ig/fe-bp-ops',
+      currentProject: '',
+      isBigfish: undefined,
+    });
+  } catch (e) {
+    console.warn('Umi UI render error:', e);
+  }
+})();
+
 
 // hot module replacement
 // @ts-ignore

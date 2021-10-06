@@ -3,6 +3,7 @@
  * You can view component api by:
  * https://github.com/ant-design/ant-design-pro-layout
  */
+
 import type {
   MenuDataItem,
   BasicLayoutProps as ProLayoutProps,
@@ -14,8 +15,7 @@ import ProLayout, {
 } from '@ant-design/pro-layout';
 import React, { useEffect } from 'react';
 import type { Dispatch } from 'umi';
-import { Link, useIntl, connect, history } from 'umi';
-// import { GithubOutlined } from '@ant-design/icons';
+import { Link, connect, history } from 'umi';
 import { Result, Button } from 'antd';
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
@@ -23,6 +23,20 @@ import type { ConnectState } from '@/models/connect';
 import { getAuthorityFromRouter } from '@/utils/utils';
 import logo from '../assets/logo.svg';
 import io from 'socket.io-client';
+import * as Sentry from "@sentry/react";
+import { Integrations } from "@sentry/tracing";
+
+Sentry.init({
+  dsn: "http://864665758cc1434ba8ae445cc2fdf1b3@192.168.160.88:9000/2",
+  autoSessionTracking: true,
+  integrations: [
+    new Integrations.BrowserTracing(),
+  ],
+
+  // We recommend adjusting this value in production, or using tracesSampler
+  // for finer control
+  tracesSampleRate: 1.0,
+});
 
 const noMatch = (
   <Result
@@ -60,12 +74,17 @@ window.onload = () => {
     socket.on(id, (msg: any) => {
       log('#receive,', msg);
     });
+    socket.on("res", (msg: any) => {
+      log('#receive,', msg);
+    });
+
   });
 
   // 接收在线用户信息
   socket.on('online', (msg: any) => {
     log('#online,', msg);
   });
+
 
   // 系统事件
   socket.on('disconnect', (msg: any) => {
@@ -211,4 +230,4 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
 export default connect(({ global, settings }: ConnectState) => ({
   collapsed: global.collapsed,
   settings,
-}))(BasicLayout);
+}))(Sentry.withProfiler(BasicLayout));

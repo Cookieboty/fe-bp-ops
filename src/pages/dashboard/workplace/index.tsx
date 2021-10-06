@@ -1,14 +1,13 @@
 import { Avatar, Card, Col, List, Skeleton, Row, Statistic } from 'antd';
 import React, { Component } from 'react';
-
-import { Link, Dispatch, connect } from 'umi';
+import type { Dispatch } from 'umi';
+import { Link, connect } from 'umi';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import moment from 'moment';
-import Radar from './components/Radar';
-import { ModalState } from './model';
+import type { ModalState } from './model';
 import EditableLinkGroup from './components/EditableLinkGroup';
 import styles from './style.less';
-import { ActivitiesType, CurrentUser, NoticeType, RadarDataType } from './data';
+import type { ActivitiesType, CurrentUser, NoticeType, RadarDataType } from './data';
 
 const links = [
   {
@@ -202,7 +201,7 @@ class Workplace extends Component<WorkplaceProps> {
               bordered={false}
               bodyStyle={{ padding: 0 }}
             >
-              <EditableLinkGroup onAdd={() => {}} links={links} linkElement={Link} />
+              <EditableLinkGroup onAdd={() => { }} links={links} linkElement={Link} />
             </Card>
             {/* <Card
               style={{ marginBottom: 24 }}
@@ -247,9 +246,7 @@ export default connect(
   }: {
     dashboardAndworkplace: ModalState;
     loading: {
-      effects: {
-        [key: string]: boolean;
-      };
+      effects: Record<string, boolean>;
     };
   }) => ({
     currentUser,
